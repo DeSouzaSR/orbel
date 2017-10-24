@@ -1,7 +1,7 @@
 
 program el2xv
-    ! Purpose: Convert orbital elements to cartesian coordinates and
-    !   velocities
+    ! Purpose: Convert cartesian coordinates and
+    !   velocities to orbital elements
     !
     ! Usage:
     !   1) $ xv2el ! prompt ialpha, gm, a, e, inc, capom, omega, capm
