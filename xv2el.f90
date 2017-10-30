@@ -44,7 +44,7 @@ program el2xv
     real*8 :: x, y, z, vx, vy, vz
 
     ! Input data
-    read(*,*) ialpha, gm, x, y, z, vx, vy, vz
+    read(*,*) gm, ialpha, x, y, z, vx, vy, vz
 
     call orbel_xv2el(x, y, z, vx, vy, vz, gm, ialpha,a,e,inc,capom,omega,capm)
 

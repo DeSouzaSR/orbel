@@ -28,21 +28,42 @@ program el2xv
     real, parameter :: PI = 4. * atan(1.) ! maximum precision
     real, parameter :: DEG2RAD = PI / 180.
     real, parameter :: RAD2DEG = 180. / PI
+    integer, parameter :: n = 100 ! Line numbers of data file
 
     ! Define variables
     character(len=20), parameter :: fmt = "(6f12.8)"
+    integer :: i ! iteraction
+    integer :: status_read
     integer :: ialpha
-    real*8 :: gm
-    real*8 :: a
-    real*8 :: e
-    real*8 :: inc
-    real*8 :: capom
-    real*8 :: omega
-    real*8 :: capm
-    real*8 :: x, y, z, vx, vy, vz
+    real(kind=8) :: gm
+    real(kind=8), dimension(n) :: a
+    real(kind=8), dimension(n) :: e
+    real(kind=8), dimension(n) :: inc
+    real(kind=8), dimension(n) :: capom
+    real(kind=8), dimension(n) :: omega
+    real(kind=8), dimension(n) :: capm
+    real(kind=8), dimension(n) :: x, y, z, vx, vy, vz
+
+    ! Open file
+    open(10, file="orbial_parameter.dat", status='old', action='read', &
+         iostat=status_read)
+
+
+    read (10, *, iostat=status_read) gm, ialpha
+
+    i = 1
+    do while ( status_read == 0 )
+        read (10, *, iostat=status_read) a(i), e(i), inc(i), capom(i),&
+              omega(i), capm(i)
+        i = i + 1
+
+        write(*,*) i, a(i), e(i), inc(i), capom(i), omega(i), capm(i)
+    end do
+
+    close(10)
 
     ! Input data
-    read(*,*) ialpha, gm, a, e, inc, capom, omega, capm
+    !read(*,*) gm, ialpha, a, e, inc, capom, omega, capm
 
     ! Convert to radian
     inc = inc * DEG2RAD
@@ -50,9 +71,11 @@ program el2xv
     omega = omega * DEG2RAD
     capm  = capm  * DEG2RAD
 
-    call orbel_el2xv(gm, ialpha, a, e, inc, capom, omega, capm, x, y, z, vx, vy, vz)
+    call orbel_el2xv(gm, ialpha, a(i), e(i), inc(i), capom(i),&
+                     omega(i), capm(i), capm(i), x(i), y(i),&
+                     z(i), vx(i), vy(i), vz(i))
 
-    write(*,fmt) x,y,z,vx,vy,vz
+    write(*,fmt) x(8), y(8), z(8), vx(8), vy(8), vz(8)
 
 end program el2xv
 
